@@ -1,6 +1,7 @@
 Nome Cognome
 Giuseppe Denaro
 Salvatore Luciano
+Nicoletta Giorgione
 
 
 
