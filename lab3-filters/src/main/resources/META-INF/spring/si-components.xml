@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<beans
+	xsi:schemaLocation=" http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd http://www.springframework.org/schema/integration http://www.springframework.org/schema/integration/spring-integration.xsd http://www.springframework.org/schema/integration/stream http://www.springframework.org/schema/integration/stream/spring-integration-stream.xsd http://www.springframework.org/schema/integration/file http://www.springframework.org/schema/integration/file/spring-integration-file.xsd"
+	xmlns:int-stream="http://www.springframework.org/schema/integration/stream"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:int-mail="http://www.springframework.org/schema/integration/mail"
+	xmlns:int-file="http://www.springframework.org/schema/integration/file"
+	xmlns:int="http://www.springframework.org/schema/integration"
+	xmlns="http://www.springframework.org/schema/beans">
+
+	<!-- Adapter for reading files -->
+
+
+
+
+	<int-file:inbound-channel-adapter
+		prevent-duplicates="true" directory="file:c://inbound"
+		channel="inboundChannel" id="producer-file-adapter">
+
+		<int:poller fixed-rate="5000" />
+
+	</int-file:inbound-channel-adapter>
+
+	<int:channel id="inboundChannel" />
+
+	<int:filter ref="selector" output-channel="outboundChannel"
+		input-channel="inboundChannel" />
+
+	<bean id="selector" class="com.intertech.lab3.FileSelector" />
+
+	<!-- a direct channel -->
+
+
+	<int:channel id="outboundChannel" />
+
+	<!-- Adapter for writing files -->
+
+
+	<int-file:outbound-channel-adapter
+		directory="file:c://outbound" channel="outboundChannel"
+		id="consumer-file-adapter" />
+
+	<int:poller id="defaultPoller" fixed-rate="200"
+		max-messages-per-poll="5" default="true" />
+
+</beans>
